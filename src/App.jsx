@@ -1,28 +1,48 @@
-import { useState } from 'react'
+import React, { useRef, useState } from 'react';
+import Hero3D from './components/Hero3D';
+import NicheSelector from './components/NicheSelector';
+import ResourceShowcase from './components/ResourceShowcase';
+import CTASection from './components/CTASection';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selected, setSelected] = useState('retro-gaming-90s');
+  const [search, setSearch] = useState('');
+  const topRef = useRef(null);
+
+  const handleExplore = () => {
+    const el = document.getElementById('niches');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
-        </div>
+    <div ref={topRef} className="min-h-screen bg-black">
+      <Hero3D onExplore={handleExplore} />
+
+      <div id="niches">
+        <NicheSelector
+          selected={selected}
+          onSelect={(k) => setSelected(k)}
+          search={search}
+          onSearch={setSearch}
+        />
       </div>
+
+      <ResourceShowcase selected={selected} search={search} />
+
+      <CTASection />
+
+      <footer className="w-full bg-black text-white/60 text-sm py-8 border-t border-white/10">
+        <div className="container mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p>© {new Date().getFullYear()} Niche Curator — Crafted for focused creators.</p>
+          <div className="flex items-center gap-4">
+            <a href="#" className="hover:text-white">About</a>
+            <a href="#resources" className="hover:text-white">Resources</a>
+            <a href="#" className="hover:text-white">Contact</a>
+          </div>
+        </div>
+      </footer>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
